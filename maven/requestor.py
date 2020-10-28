@@ -18,7 +18,7 @@ class Requestor(object):
     def request(self, url, onFail, onSuccess):
         headers = {"User-Agent": self.user_agent}
         if self.username and self.password:
-            headers["Authorization"] = "Basic " + base64.b64encode(self.username + ":" + self.password)
+            headers["Authorization"] = "Basic " + (base64.b64encode((self.username + ":" + self.password).encode('utf-8'))).decode('utf-8')
         req = Request(url, None, headers)
         try:
             response = urlopen(req)
