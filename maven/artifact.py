@@ -1,5 +1,6 @@
 import os.path
 
+
 class Artifact(object):
     def __init__(self, group_id, artifact_id, version, classifier=None, extension=None):
         if not group_id:
@@ -16,7 +17,7 @@ class Artifact(object):
         else:
             self.extension = extension
 
-    def is_snapshot(self):        
+    def is_snapshot(self):
         return self.version and self.version.endswith("-SNAPSHOT")
 
     def path(self, with_version=True):

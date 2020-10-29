@@ -2,6 +2,7 @@ from lxml import etree
 
 from .requestor import RequestException
 
+
 class Resolver(object):
     def __init__(self, base, requestor):
         self.requestor = requestor
@@ -25,7 +26,6 @@ class Resolver(object):
 
     def _onFail(self, url, e):
         raise RequestException("Failed to download maven-metadata.xml from '%s'" % url)
-
 
     def resolve(self, artifact):
         version = artifact.version

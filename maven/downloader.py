@@ -1,16 +1,16 @@
 import hashlib
 import os
-from .requestor import Requestor,RequestException
+from .requestor import Requestor, RequestException
 from .resolver import Resolver
 from .artifact import Artifact
 import sys
 import getopt
 
+
 class Downloader(object):
     def __init__(self, base="http://repo1.maven.org/maven2", username=None, password=None):
         self.requestor = Requestor(username, password)
         self.resolver = Resolver(base, self.requestor)
-
 
     def download(self, artifact, filename=None, suppress_log=False):
         filename = artifact.get_filename(filename)
@@ -18,11 +18,12 @@ class Downloader(object):
         if not self.verify_md5(filename, url + ".md5"):
             if not suppress_log:
                 print("Downloading artifact " + str(artifact))
-                hook=self._chunk_report
+                hook = self._chunk_report
             else:
-                hook=self._chunk_report_suppress
+                hook = self._chunk_report_suppress
 
-            onError = lambda uri, err: self._throwDownloadFailed("Failed to download artifact " + str(artifact) + "from " + uri)
+            onError = lambda uri, err: self._throwDownloadFailed(
+                "Failed to download artifact " + str(artifact) + "from " + uri)
             response = self.requestor.request(url, onError, lambda r: r)
 
             if response:
@@ -46,9 +47,9 @@ class Downloader(object):
 
     def _chunk_report(self, bytes_so_far, chunk_size, total_size):
         percent = float(bytes_so_far) / total_size
-        percent = round(percent*100, 2)
+        percent = round(percent * 100, 2)
         sys.stdout.write("Downloaded %d of %d bytes (%0.2f%%)\r" %
-                 (bytes_so_far, total_size, percent))
+                         (bytes_so_far, total_size, percent))
 
         if bytes_so_far >= total_size:
             sys.stdout.write('\n')
@@ -108,12 +109,13 @@ __doc__ = """
      %(program_name)s "org.apache.solr:solr:war:3.5.0"
   """
 
+
 def main():
     try:
         opts, args = getopt.getopt(sys.argv[1:], "m:u:p:", ["maven-repo=", "username=", "password="])
     except getopt.GetoptError as err:
         # print help information and exit:
-        print(str(err)) # will print something like "option -a not recognized"
+        print(str(err))  # will print something like "option -a not recognized"
         usage()
         sys.exit(2)
 
@@ -155,6 +157,7 @@ def main():
 
 def usage():
     print(__doc__ % {'program_name': os.path.basename(sys.argv[0])})
+
 
 if __name__ == '__main__':
     main()
