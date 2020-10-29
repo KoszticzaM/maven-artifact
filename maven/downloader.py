@@ -26,7 +26,7 @@ class Downloader(object):
             response = self.requestor.request(url, onError, lambda r: r)
 
             if response:
-                with open(filename, 'w') as f:
+                with open(filename, 'wb') as f:
                     self._write_chunks(response, f, report_hook=hook)
                 if not suppress_log:
                     print("Downloaded artifact %s to %s" % (artifact, filename))
@@ -54,7 +54,7 @@ class Downloader(object):
             sys.stdout.write('\n')
 
     def _write_chunks(self, response, file, chunk_size=8192, report_hook=None):
-        total_size = response.info().getheader('Content-Length').strip()
+        total_size = response.length
         total_size = int(total_size)
         bytes_so_far = 0
 
